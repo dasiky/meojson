@@ -1,10 +1,28 @@
 #include <iostream>
-
+#include <vector>
 #include "json.h"
+#include "json_array.h"
+#include "json_parser.h"
+using namespace std;
+//using namespace json;
+void test() {
+    auto v = json::parser::parse(R"(  ["\u123"])");
+    if (v.has_value())
+        cout << v.value()[0].format() << endl;
+}
+
+class Test {
+public:
+    template <typename... Args>
+    Test(Args&& ... args) {
+        cout << sizeof...Args << endl;
+        cout << sizeof...args << endl;
+    }
+};
 
 int main()
 {
-
+    Test t = { {"1", 2}, {"2", "3"} };
     /*** Parse ***/
     {
         std::cout << "****** Parsing ****** " << std::endl;

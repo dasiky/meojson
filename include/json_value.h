@@ -43,20 +43,13 @@ namespace json
         value(float num);
         value(double num);
         value(long double num);
-
         value(const char* str);
         value(const std::string& str);
         value(std::string&& str);
-
         value(const array& arr);
         value(array&& arr);
-        // value(std::initializer_list<value> init_list); // for array
-
         value(const object& obj);
         value(object&& obj);
-        // error: conversion from ‘<brace-enclosed initializer list>’ to ‘json::value’ is ambiguous
-        // value(std::initializer_list<std::pair<std::string, value>> init_list); // for object
-
         // Constructed from raw data
         template <typename... Args>
         value(value_type type, Args &&...args)
@@ -71,7 +64,6 @@ namespace json
         // Prohibit conversion of other types to value
         template <typename T>
         value(T) = delete;
-
         ~value();
 
         bool valid() const noexcept { return _type != value_type::Invalid ? true : false; }
@@ -89,19 +81,18 @@ namespace json
         const value& at(const std::string& key) const;
 
         template <typename Type>
-        decltype(auto) get(const std::string& key, Type default_value) const
+        Type get(const std::string& key, Type default_value) const
         {
             return is_object() ? as_object().get(key, default_value) : default_value;
         }
         template <typename Type>
-        decltype(auto) get(size_t pos, Type default_value) const
+        Type get(size_t pos, Type default_value) const
         {
             return is_array() ? as_array().get(pos, default_value) : default_value;
         }
 
         const bool as_boolean() const;
         const int as_integer() const;
-        // const unsigned as_unsigned() const;
         const long as_long() const;
         const unsigned long as_unsigned_long() const;
         const long long as_long_long() const;
